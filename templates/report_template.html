@@ -1,164 +1,219 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Portfolio Health Report</title>
-    <style>
+    <meta charset="UTF-8" />
+    <title>Portfolio Report</title>
+
+    <style type="text/css">
         body {
             font-family: Arial, sans-serif;
-            color: #1a2e22;
+            font-size: 12px;
+            color: #000000;
             margin: 40px;
         }
 
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #2e7d5b;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
-
         h1 {
-            color: #2e7d5b;
-            margin: 0;
+            font-size: 18px;
         }
 
-        .sub {
-            color: #666;
+        h2 {
             font-size: 14px;
-        }
-
-        .section {
-            margin-top: 30px;
-        }
-
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 15px;
-        }
-
-        .good {
-            color: #2e7d5b;
-            font-weight: bold;
-        }
-
-        .warn {
-            color: #d4a017;
-            font-weight: bold;
-        }
-
-        .bad {
-            color: #d9534f;
-            font-weight: bold;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 4px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
+            margin-top: 8px;
         }
 
         th {
-            background: #f5f7f6;
+            background-color: #dddddd;
+            border: 1px solid #999999;
+            padding: 6px 8px;
+            text-align: left;
+            font-size: 11px;
+        }
+
+        td {
+            border: 1px solid #999999;
+            padding: 6px 8px;
+            font-size: 11px;
+            word-break: keep-all;
+        }
+
+        .good {
+            color: #007700;
+            font-weight: bold;
+        }
+
+        .warn {
+            color: #cc8800;
+            font-weight: bold;
+        }
+
+        .bad {
+            color: #cc0000;
+            font-weight: bold;
         }
 
         .footer {
             margin-top: 40px;
-            font-size: 12px;
-            color: #777;
+            font-size: 10px;
+            color: #666666;
+            border-top: 1px solid #cccccc;
+            padding-top: 8px;
+        }
+
+        p {
+            margin: 6px 0;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h1>PF Radar Portfolio Health Report</h1>
-        <div class="sub">
-            Generated for {{USER_NAME}} | {{DATE}}
-        </div>
-    </div>
+    <h1>PF Radar — Portfolio Report</h1>
 
-    <div class="section">
-        <h2>Executive Summary</h2>
+    <p>
+        Prepared for: <b>{{USER_NAME}}</b> |
+        Date: <b>{{DATE}}</b> |
+        Period: <b>{{PERIOD}}</b>
+    </p>
 
-        <div class="card">
-            Portfolio Health Score:
-            <span class="good">{{HEALTH_SCORE}} / 100</span>
-        </div>
+    <p>
+        Portfolio Score: <b>{{HEALTH_SCORE}} / 100</b> |
+        Holdings: <b>{{STOCK_COUNT}}</b>
+    </p>
 
-        <div class="card">
-            Return Outlook:
-            <span class="good">{{RETURN_COMMENT}}</span>
-        </div>
+    <!-- ================= 1. SUMMARY ================= -->
 
-        <div class="card">
-            Risk Outlook:
-            <span class="warn">{{RISK_COMMENT}}</span>
-        </div>
-    </div>
+    <h2>1. Executive Summary</h2>
 
-    <div class="section">
-        <h2>Diagnostic Metrics</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:160px;">Item</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Return Outlook</td>
+                <td class="good">{{RETURN_COMMENT}}</td>
+            </tr>
+            <tr>
+                <td>Risk Outlook</td>
+                <td class="warn">{{RISK_COMMENT}}</td>
+            </tr>
+            <tr>
+                <td>Overview</td>
+                <td>{{PORTFOLIO_SUMMARY}}</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <table>
+    <!-- ================= 2. HOLDINGS ================= -->
+
+    <h2>2. Portfolio Holdings</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Stock</th>
+                <th>Ticker</th>
+                <th>Sector</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{HOLDINGS_ROWS | safe}}
+        </tbody>
+    </table>
+
+    <!-- ================= 3. METRICS ================= -->
+
+    <h2>3. Diagnostic Metrics</h2>
+
+    <table>
+        <thead>
             <tr>
                 <th>Metric</th>
                 <th>Value</th>
-                <th>Ideal Range</th>
+                <th>Target</th>
                 <th>Status</th>
             </tr>
-
+        </thead>
+        <tbody>
             <tr>
                 <td>CAGR</td>
                 <td>{{CAGR}}%</td>
-                <td>>12%</td>
-                <td>{{CAGR_STATUS}}</td>
+                <td>&gt;12%</td>
+                <td class="{{CAGR_BADGE}}">{{CAGR_STATUS}}</td>
             </tr>
-
             <tr>
                 <td>Volatility</td>
                 <td>{{VOL}}%</td>
-                <td>
-                    <18%< /td>
-                <td>{{VOL_STATUS}}</td>
+                <td>&lt;18%</td>
+                <td class="{{VOL_BADGE}}">{{VOL_STATUS}}</td>
             </tr>
-
             <tr>
-                <td>Sharpe Ratio</td>
+                <td>Sharpe</td>
                 <td>{{SHARPE}}</td>
-                <td>>1.0</td>
-                <td>{{SHARPE_STATUS}}</td>
+                <td>&gt;1</td>
+                <td class="{{SHARPE_BADGE}}">{{SHARPE_STATUS}}</td>
             </tr>
-        </table>
-    </div>
+        </tbody>
+    </table>
 
-    <div class="section">
-        <h2>Suggested Actions</h2>
+    <!-- ================= 4. ACTIONS ================= -->
 
-        <div class="card">1. {{SUGGESTION_1}}</div>
-        <div class="card">2. {{SUGGESTION_2}}</div>
-        <div class="card">3. {{SUGGESTION_3}}</div>
-    </div>
+    <h2>4. Recommended Actions</h2>
 
-    <div class="section">
-        <h2>Recommended Allocation</h2>
-        <div class="card">
-            {{ALLOCATION_TEXT}}
-        </div>
-    </div>
+    <table>
+        <tbody>
+            <tr>
+                <td style="width:70px;">1</td>
+                <td>{{SUGGESTION_1}}</td>
+            </tr>
+            <tr>
+                <td style="width:70px;">2</td>
+                <td>{{SUGGESTION_2}}</td>
+            </tr>
+            <tr>
+                <td style="width:70px;">3</td>
+                <td>{{SUGGESTION_3}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ================= 5. ALLOCATION ================= -->
+
+    <h2>5. Recommended Allocation</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Current</th>
+                <th>Optimal</th>
+                <th>Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ALLOCATION_ROWS | safe}}
+        </tbody>
+    </table>
+
+    <p>{{ALLOCATION_TEXT}}</p>
 
     <div class="footer">
-        Confidential | For educational purposes only
+        Confidential. Educational use only. Not financial advice.
     </div>
 
 </body>

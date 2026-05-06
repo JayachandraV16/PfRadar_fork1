@@ -327,23 +327,14 @@ def build_full_report(
         # Asset allocation = actual portfolio weights
     report_dict["asset_allocation"] = final_weights
 
-        # ---------- REAL RISK CONTRIBUTION ----------
-    tickers_rc = list(final_weights.keys())
-    w = np.array([final_weights[t] for t in tickers_rc], dtype=float)
+        # ---------- INDIVIDUAL STOCK VOLATILITY ----------
 
-        # Match covariance matrix ordering
-    cov = np.array(report_dict["covariance_matrix"], dtype=float)
-
-    portfolio_var = float(w.T @ cov @ w)
-
-    if portfolio_var > 1e-12:
-        marginal = cov @ w
-        rc = (w * marginal) / portfolio_var
-    else:
-        rc = np.ones(len(w)) / len(w)
+    individual_risk = (
+            rets[used_syms].std() * np.sqrt(TRADING_DAYS_PER_YEAR) * 100
+        )
 
     report_dict["risk_weightage"] = {
-        tickers_rc[i]: float(round(rc[i], 8))
-        for i in range(len(tickers_rc))
-    }
+            sym: float(round(individual_risk[sym], 2))
+            for sym in used_syms
+        }
     return report_dict

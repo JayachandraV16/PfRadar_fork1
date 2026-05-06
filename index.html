@@ -649,6 +649,7 @@
                     <thead>
                         <tr style="border-bottom: 1px solid var(--border-color);">
                             <th style="padding: 0.75rem; color: var(--text-secondary); font-weight: 500;">Ticker</th>
+                            <th style="padding: 0.75rem; color: var(--text-secondary); font-weight: 500;">Sector</th>
                             <th style="padding: 0.75rem; color: var(--text-secondary); font-weight: 500;">Weight (0.0 -
                                 1.0)</th>
                             <th
@@ -838,11 +839,11 @@
                 <!-- Risk Weightage -->
                 <div class="chart-container" style="flex: 1; min-width: 300px; height: 400px; margin-bottom: 0;">
                     <h2>
-                        Risk Contribution
+                        Individual Stock Risk
                         <div class="info-wrap">
                             <button class="info-btn">i</button>
                             <div class="info-tooltip">
-                                Contribution of each stock to overall portfolio volatility.
+                                Annualized volatility of each stock based on historical returns.
                             </div>
                         </div>
                     </h2>
@@ -1318,7 +1319,7 @@
             });
         });
 
-        function addTicker() {
+        async function addTicker() {
             const selectEl = document.getElementById('tickerSelect');
             let ticker = selectEl.value.trim().toUpperCase();
             if (!ticker) return;
@@ -1332,7 +1333,12 @@
                 return;
             }
 
-            selectedPortfolio.push({ ticker, weight: 0 });
+            const sector = await getSector(ticker);
+            selectedPortfolio.push({
+                ticker,
+                weight: 0,
+                sector
+            });
             redistributeWeights();
             renderTable();
             selectEl.value = '';
@@ -1367,6 +1373,26 @@
                 item.weight = isNaN(val) ? 0 : val;
             }
         }
+        const sectorCache = {};
+
+        async function getSector(ticker) {
+
+            if (sectorCache[ticker]) {
+                return sectorCache[ticker];
+            }
+
+            try {
+                const response = await fetch(`/api/sector?ticker=${ticker}`);
+                const data = await response.json();
+
+                sectorCache[ticker] = data.sector || "Other";
+
+                return sectorCache[ticker];
+
+            } catch (err) {
+                return "Other";
+            }
+        }
 
         function renderTable() {
             const tbody = document.getElementById('tickersTableBody');
@@ -1383,14 +1409,42 @@
                 const tr = document.createElement('tr');
                 tr.style.borderBottom = '1px solid rgba(45,94,63,0.08)';
                 tr.innerHTML = `
-                    <td style="padding: 0.75rem; font-weight: 600;">${item.ticker}</td>
-                    <td style="padding: 0.75rem;">
-                        <input type="number" step="0.01" min="0" max="1" class="table-input" value="${item.weight}" onchange="updateWeight('${item.ticker}', this.value)">
-                    </td>
-                    <td style="padding: 0.75rem; text-align: right;">
-                        <button onclick="removeTicker('${item.ticker}')" class="remove-btn">Remove</button>
-                    </td>
-                `;
+                        <td style="padding: 0.75rem; font-weight: 600;">
+                            ${item.ticker}
+                        </td>
+
+                        <td style="padding: 0.75rem;">
+                            <span style="
+                                background: rgba(46,125,91,0.10);
+                                color: var(--accent-user);
+                                padding: 0.35rem 0.75rem;
+                                border-radius: 999px;
+                                font-size: 0.82rem;
+                                font-weight: 600;
+                                display: inline-block;
+                            ">
+                                ${item.sector || 'Other'}
+                            </span>
+                        </td>
+
+                        <td style="padding: 0.75rem;">
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                max="1"
+                                class="table-input"
+                                value="${item.weight}"
+                                onchange="updateWeight('${item.ticker}', this.value)"
+                            >
+                        </td>
+
+                        <td style="padding: 0.75rem; text-align: right;">
+                            <button onclick="removeTicker('${item.ticker}')" class="remove-btn">
+                                Remove
+                            </button>
+                        </td>
+                    `;
                 tbody.appendChild(tr);
             });
         }
@@ -1974,8 +2028,8 @@
             });
         }
 
-        function drawRiskChart(weights) {
-            if (!weights) return;
+        function drawRiskChart(riskData) {
+            if (!riskData) return;
 
             const ctx = riskCanvas.getContext('2d');
 
@@ -1983,10 +2037,8 @@
                 currentRiskChart.destroy();
             }
 
-            const labels = Object.keys(weights);
-            const data = Object.values(weights).map(v =>
-                Number((v * 100).toFixed(2))
-            );
+            const labels = Object.keys(riskData);
+            const data = Object.values(riskData).map(v => Number(v.toFixed(2)));
 
             const colors = [
                 '#e05263',
@@ -2003,7 +2055,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Risk Contribution (%)',
+                        label: 'Volatility (%)',
                         data: data,
                         backgroundColor: colors.slice(0, labels.length),
                         borderRadius: 8,
