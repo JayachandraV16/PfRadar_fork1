@@ -1557,25 +1557,70 @@
                     const userPeriodVol = chartData.period_volatility_user;
                     const optPeriodVol = chartData.period_volatility_optimal;
 
-                    if (userPeriodReturn !== null && userPeriodReturn !== undefined) {
-                        const sign = userPeriodReturn >= 0 ? '+' : '';
-                        userReturnEl.innerText = sign + (userPeriodReturn * 100).toFixed(2) + '%';
-                        userReturnEl.className = `metric-value ${userPeriodReturn >= 0 ? 'cagr-positive' : 'cagr-negative'}`;
+                    // CONSISTENT FRONTIER METRICS
+
+                    const userFrontier = data.efficient_frontier_data.user_portfolio;
+                    const optFrontier = data.efficient_frontier_data.optimal_portfolio;
+
+                    // USER PORTFOLIO
+
+                    if (userFrontier && userFrontier.return !== undefined) {
+
+                        const val = userFrontier.return;
+                        const sign = val >= 0 ? '+' : '';
+
+                        userReturnEl.innerText =
+                            sign + (val * 100).toFixed(2) + '%';
+
+                        userReturnEl.className =
+                            `metric-value ${val >= 0 ? 'cagr-positive' : 'cagr-negative'}`;
+
                     } else {
+
                         userReturnEl.innerText = '--';
                         userReturnEl.className = 'metric-value';
                     }
-                    userRiskEl.innerText = userPeriodVol !== null ? 'Volatility: ' + (userPeriodVol * 100).toFixed(2) + '%' : '--';
 
-                    if (optPeriodReturn !== null && optPeriodReturn !== undefined) {
-                        const sign = optPeriodReturn >= 0 ? '+' : '';
-                        optReturnEl.innerText = sign + (optPeriodReturn * 100).toFixed(2) + '%';
-                        optReturnEl.className = `metric-value ${optPeriodReturn >= 0 ? 'cagr-positive' : 'cagr-negative'}`;
+                    if (userFrontier && userFrontier.volatility !== undefined) {
+
+                        userRiskEl.innerText =
+                            'Volatility: ' +
+                            (userFrontier.volatility * 100).toFixed(2) + '%';
+
                     } else {
+
+                        userRiskEl.innerText = '--';
+                    }
+
+                    // OPTIMAL PORTFOLIO
+
+                    if (optFrontier && optFrontier.return !== undefined) {
+
+                        const val = optFrontier.return;
+                        const sign = val >= 0 ? '+' : '';
+
+                        optReturnEl.innerText =
+                            sign + (val * 100).toFixed(2) + '%';
+
+                        optReturnEl.className =
+                            `metric-value ${val >= 0 ? 'cagr-positive' : 'cagr-negative'}`;
+
+                    } else {
+
                         optReturnEl.innerText = '--';
                         optReturnEl.className = 'metric-value';
                     }
-                    optRiskEl.innerText = optPeriodVol !== null ? 'Volatility: ' + (optPeriodVol * 100).toFixed(2) + '%' : '--';
+
+                    if (optFrontier && optFrontier.volatility !== undefined) {
+
+                        optRiskEl.innerText =
+                            'Volatility: ' +
+                            (optFrontier.volatility * 100).toFixed(2) + '%';
+
+                    } else {
+
+                        optRiskEl.innerText = '--';
+                    }
 
                     const optWeights = data.target_risk_portfolio !== null ? data.target_risk_portfolio : data.optimal_weights;
                     let weightsStr = "";

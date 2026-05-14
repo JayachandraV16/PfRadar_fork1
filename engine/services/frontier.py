@@ -89,4 +89,18 @@ def get_target_risk_portfolio(returns: np.ndarray, cov_matrix: np.ndarray, risk_
     return weights
 
 
-__all__ = ["RandomPortfolioCloud", "random_portfolio_cloud", "summarize_cloud", "get_target_risk_portfolio"]
+def annualized_stats_for_weights(
+    weights: np.ndarray,
+    mu_d: np.ndarray,
+    cov_d: np.ndarray,
+) -> tuple[float, float]:
+    """
+    Returns (annualized_return, annualized_volatility) for a given weight vector.
+    Uses the same path as the frontier cloud so all points are comparable.
+    """
+    w = np.asarray(weights, dtype=float)
+    w = w / w.sum()
+    ann_ret, ann_vol = portfolio_mu_sigma_from_daily(w, mu_d, cov_d)
+    return float(ann_ret), float(ann_vol)
+
+__all__ = ["RandomPortfolioCloud", "random_portfolio_cloud", "summarize_cloud", "get_target_risk_portfolio","annualized_stats_for_weights"]

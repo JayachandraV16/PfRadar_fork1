@@ -5,7 +5,7 @@ import sys
 # Add engine to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "engine"))
 
-from services.report import build_full_report
+from engine.services.report import build_full_report
 
 print(" Generating demo report...")
 
