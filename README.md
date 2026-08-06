@@ -1,11 +1,11 @@
 # PfRadar
 
 Portfolio analytics and optimization project focused on Indian equities (NSE/BSE).
+
+## Tech stack
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Deployment](https://img.shields.io/badge/Deployed-Vercel-black)
-## Tech stack
-
 - Python
 - pandas, numpy, scipy
 - yfinance
