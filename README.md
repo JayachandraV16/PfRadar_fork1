@@ -7,7 +7,45 @@ Portfolio analytics and optimization project focused on Indian equities (NSE/BSE
 PfRadar is a portfolio analytics platform that helps investors build optimized portfolios for Indian equities.
 
 The application fetches real-time NSE/BSE stock data, calculates portfolio risk and expected return, applies Modern Portfolio Theory and CAPM, and generates visual analytics together with downloadable PDF reports.
+## 📸 Screenshots
 
+### Dashboard
+
+<p align="center">
+  <img src="assets/dashboard.png" width="900"/>
+</p>
+
+The main interface allows users to add NSE/BSE stocks, assign portfolio weights, and generate optimized portfolio analytics.
+
+---
+
+### System Architecture
+
+<p align="center">
+  <img src="assets/architecture.png" width="900"/>
+</p>
+
+The application uses a modular architecture where the frontend communicates with a Python analytics engine responsible for market data retrieval, portfolio optimization, CAPM calculations, and report generation.
+
+---
+
+### Efficient Frontier
+
+<p align="center">
+  <img src="assets/efficient-frontier.png" width="900"/>
+</p>
+
+Visualization of randomly generated portfolios highlighting the Efficient Frontier, Maximum Sharpe Ratio portfolio, and Minimum Volatility portfolio.
+
+---
+
+### Portfolio Performance
+
+<p align="center">
+  <img src="assets/portfolio-performance.png" width="900"/>
+</p>
+
+Comparison of portfolio growth against benchmark indices over the selected investment period.
 ## Tech stack
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
