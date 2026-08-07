@@ -12,7 +12,7 @@ The application fetches real-time NSE/BSE stock data, calculates portfolio risk 
 ### Dashboard
 
 <p align="center">
-  <img src="assets/dashboard.png" width="900"/>
+  <img src="dashboard.png" width="900"/>
 </p>
 
 The main interface allows users to add NSE/BSE stocks, assign portfolio weights, and generate optimized portfolio analytics.
@@ -22,7 +22,7 @@ The main interface allows users to add NSE/BSE stocks, assign portfolio weights,
 ### System Architecture
 
 <p align="center">
-  <img src="assets/architecture.png" width="900"/>
+  <img src="architecture.png" width="900"/>
 </p>
 
 The application uses a modular architecture where the frontend communicates with a Python analytics engine responsible for market data retrieval, portfolio optimization, CAPM calculations, and report generation.
@@ -32,7 +32,7 @@ The application uses a modular architecture where the frontend communicates with
 ### Efficient Frontier
 
 <p align="center">
-  <img src="assets/efficient-frontier.png" width="900"/>
+  <img src="efficient-frontier.png" width="900"/>
 </p>
 
 Visualization of randomly generated portfolios highlighting the Efficient Frontier, Maximum Sharpe Ratio portfolio, and Minimum Volatility portfolio.
@@ -42,7 +42,7 @@ Visualization of randomly generated portfolios highlighting the Efficient Fronti
 ### Portfolio Performance
 
 <p align="center">
-  <img src="assets/portfolio-performance.png" width="900"/>
+  <img src="portfolio-performance.png" width="900"/>
 </p>
 
 Comparison of portfolio growth against benchmark indices over the selected investment period.
