@@ -2,6 +2,12 @@
 
 Portfolio analytics and optimization project focused on Indian equities (NSE/BSE).
 
+## Overview
+
+PfRadar is a portfolio analytics platform that helps investors build optimized portfolios for Indian equities.
+
+The application fetches real-time NSE/BSE stock data, calculates portfolio risk and expected return, applies Modern Portfolio Theory and CAPM, and generates visual analytics together with downloadable PDF reports.
+
 ## Tech stack
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
